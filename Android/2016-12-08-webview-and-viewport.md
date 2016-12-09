@@ -8,7 +8,7 @@ ionic, cordova 등의 hybrid app등의 발목을 잡는 문제도 바로 이 성
 
 ---
 
-## Android webview memory leak
+## Memory Leak
 
 메모리 누수 문제가 있다.
 android webview가 컨텐츠 중에서 중요한 부분을 차지한다면 반드시 체크해봐야 하는 문제이다.
@@ -17,11 +17,28 @@ android webview가 컨텐츠 중에서 중요한 부분을 차지한다면 반�
 
 * `activity` 대신 `applicationContext` 사용
 * `layout xml`에서 `webView` 정의하지 않고, 코드로 추가
+
+``` java
+    FrameLayout contentsHolder = (FrameLayout) findViewById(R.id.contentsHolder);
+    webView = new WebView(getApplicationContext());
+    contentsHolder.addView(webView);
+``` 
+
 * `onDestroy`에서 `webView.removeAllViews()` 및 `webView.destroy()` 실행
+
+``` java
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        webView.removeAllViews();
+        webView.destroy();
+    }
+```
+
 
 ---
 
-## Android webview iframe에서 javascript 동작 문제
+## iframe에서 javascript 동작 문제
 
 일반적인 상황인지는 모르겠지만, iframe태그로 포함된 컨텐츠에서 javascript가 동작하지 않는 경우가 있다.
 
@@ -36,7 +53,7 @@ android webview가 컨텐츠 중에서 중요한 부분을 차지한다면 반�
 
 ---
 
-## Android webview viewport 문제
+## Viewport 문제
 
 API 17버전 이하에서, input 태그 항목에서 입력을 받을때 화면이 확대되는 문제가 있다.
 여러가지 방법을 시도해본 결과, 아래와 같이 해결 할 수 있었다.
